@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase";
-import { collection, addDoc, getDocs, deleteDoc, doc, query, where } from "firebase/firestore";
-import { Doughnut } from "react-chartjs-2";
+import { collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { Doughnut, Bar } from "react-chartjs-2";
 import dayjs from "dayjs";
 import "./ModernPage.css";
 
@@ -21,25 +21,34 @@ const Income = () => {
   const [selectedMonth, setSelectedMonth] = useState(dayjs().month() + 1);
   const [selectedYear, setSelectedYear] = useState(dayjs().year());
   const [loading, setLoading] = useState(false);
+  const [view, setView] = useState("monthly");
 
   const fetchIncome = async (month, year) => {
     setLoading(true);
     const snap = await getDocs(collection(db, "income"));
-    // Filter by month/year
-    const filtered = snap.docs
-      .map(doc => ({ id: doc.id, ...doc.data() }))
-      .filter(i => {
+    const all = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    let filtered;
+    if (view === "monthly") {
+      filtered = all.filter(i => {
         if (!i.date) return false;
         const d = dayjs(i.date);
         return d.month() + 1 === month && d.year() === year;
       });
+    } else {
+      filtered = all.filter(i => {
+        if (!i.date) return false;
+        const d = dayjs(i.date);
+        return d.year() === year;
+      });
+    }
     setIncome(filtered);
     setLoading(false);
   };
 
   useEffect(() => {
     fetchIncome(selectedMonth, selectedYear);
-  }, [selectedMonth, selectedYear]);
+    // eslint-disable-next-line
+  }, [selectedMonth, selectedYear, view]);
 
   const handleAddIncome = async (e) => {
     e.preventDefault();
@@ -61,21 +70,41 @@ const Income = () => {
   };
 
   // Chart data
+  const chartColors = ["#42a5f5", "#66bb6a", "#ffa726", "#ab47bc", "#ef5350", "#26a69a", "#f06292", "#ffd54f", "#8d6e63", "#00bcd4"];
   const chartData = {
     labels: income.map(i => i.source),
     datasets: [{
       data: income.map(i => i.amount),
-      backgroundColor: ["#42a5f5", "#66bb6a", "#ffa726", "#ab47bc", "#ef5350", "#26a69a"],
+      backgroundColor: chartColors,
     }]
   };
   const totalIncome = income.reduce((sum, i) => sum + Number(i.amount), 0);
 
-  // Month/year options
+  // For yearly view, show bar chart by month
   const months = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
   ];
   const years = Array.from({ length: 6 }, (_, i) => dayjs().year() - 2 + i);
+
+  const yearlyData = () => {
+    // Group by month
+    const data = Array(12).fill(0);
+    income.forEach(i => {
+      if (i.date) {
+        const d = dayjs(i.date);
+        data[d.month()] += Number(i.amount);
+      }
+    });
+    return {
+      labels: months,
+      datasets: [{
+        label: "Income by Month",
+        data,
+        backgroundColor: chartColors,
+      }]
+    };
+  };
 
   return (
     <div className="modern-page-grid">
@@ -112,6 +141,24 @@ const Income = () => {
           <select value={selectedYear} onChange={e => setSelectedYear(Number(e.target.value))}>
             {years.map(y => <option key={y} value={y}>{y}</option>)}
           </select>
+          <span style={{ marginLeft: 16 }}>
+            <button
+              type="button"
+              className="modern-form-button"
+              style={{ background: view === "monthly" ? "#5f4dee" : "#b1c9ef", color: view === "monthly" ? "#fff" : "#222", marginRight: 8 }}
+              onClick={() => setView("monthly")}
+            >
+              Monthly
+            </button>
+            <button
+              type="button"
+              className="modern-form-button"
+              style={{ background: view === "yearly" ? "#5f4dee" : "#b1c9ef", color: view === "yearly" ? "#fff" : "#222" }}
+              onClick={() => setView("yearly")}
+            >
+              Yearly
+            </button>
+          </span>
         </div>
         <div className="modern-table-summary">
           <b>Total Income:</b> {totalIncome}
@@ -140,7 +187,11 @@ const Income = () => {
       {/* Chart */}
       <div className="modern-card">
         <h2>Income Sources</h2>
-        <Doughnut data={chartData} />
+        {view === "monthly" ? (
+          <Doughnut data={chartData} />
+        ) : (
+          <Bar data={yearlyData()} />
+        )}
       </div>
     </div>
   );

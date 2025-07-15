@@ -55,23 +55,53 @@ const Home = () => {
   };
 
   return (
-    <div className="modern-card" style={{ maxWidth: 700, margin: "2rem auto" }}>
-      <h2>Welcome to BudgetMaster</h2>
-      <p style={{ fontSize: "1.1rem", marginBottom: 16 }}>
-        BudgetMaster is your all-in-one personal finance tracker. Effortlessly manage your income, expenses, savings, and goals. Visualize your financial health, set targets, and stay on top of your money every month.
-      </p>
-      <ul style={{ marginBottom: 24 }}>
-        <li>✔️ Track income, expenses, and savings by month/year</li>
-        <li>✔️ Set and monitor financial goals</li>
-        <li>✔️ Visual charts and tables for every section</li>
-        <li>✔️ Modern, responsive, and beautiful design</li>
-        <li>✔️ Dark and light mode support</li>
-      </ul>
-      <h3 style={{ color: "#5f4dee", marginBottom: 16 }}>This Month's Overview</h3>
-      <Bar data={chartData} options={{ plugins: { legend: { display: false } } }} />
-      <footer style={{ marginTop: 32, color: '#5f4dee', fontWeight: 600, textAlign: 'center', width: '100%' }}>
-        &copy; {new Date().getFullYear()} kanak verma
-      </footer>
+    <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #f0f3fa 0%, #b1c9ef 100%)" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "2rem 1rem" }}>
+        <section style={{ textAlign: "center", marginBottom: 40 }}>
+          <h1 style={{ fontSize: "2.5rem", fontWeight: 800, color: "#5f4dee", marginBottom: 8 }}>BudgetMaster</h1>
+          <p style={{ fontSize: "1.3rem", color: "#395886", marginBottom: 16 }}>
+            Your all-in-one personal finance tracker
+          </p>
+          <div style={{ display: "flex", justifyContent: "center", gap: 24, marginBottom: 24 }}>
+            <div style={{ background: "#fff", borderRadius: 16, padding: 24, boxShadow: "0 2px 8px rgba(95,77,222,0.08)", minWidth: 180 }}>
+              <span role="img" aria-label="income" style={{ fontSize: 32 }}>💰</span>
+              <div style={{ fontWeight: 700, color: "#5f4dee", fontSize: 18 }}>Track Income</div>
+            </div>
+            <div style={{ background: "#fff", borderRadius: 16, padding: 24, boxShadow: "0 2px 8px rgba(95,77,222,0.08)", minWidth: 180 }}>
+              <span role="img" aria-label="expenses" style={{ fontSize: 32 }}>🛒</span>
+              <div style={{ fontWeight: 700, color: "#ef5350", fontSize: 18 }}>Track Expenses</div>
+            </div>
+            <div style={{ background: "#fff", borderRadius: 16, padding: 24, boxShadow: "0 2px 8px rgba(95,77,222,0.08)", minWidth: 180 }}>
+              <span role="img" aria-label="goals" style={{ fontSize: 32 }}>🎯</span>
+              <div style={{ fontWeight: 700, color: "#66bb6a", fontSize: 18 }}>Set Goals</div>
+            </div>
+          </div>
+          <p style={{ fontSize: "1.1rem", color: "#395886", marginBottom: 0 }}>
+            Visualize your financial health, set targets, and stay on top of your money every month.
+          </p>
+        </section>
+        <section style={{ background: "#fff", borderRadius: 20, boxShadow: "0 2px 16px rgba(95,77,222,0.08)", padding: 32, marginBottom: 32 }}>
+          <h3 style={{ color: "#5f4dee", marginBottom: 16, textAlign: "center" }}>This Month's Overview</h3>
+          <Bar data={chartData} options={{ plugins: { legend: { display: false } } }} />
+          <div style={{ display: "flex", justifyContent: "space-around", marginTop: 32 }}>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontWeight: 700, color: "#5f4dee", fontSize: 20 }}>Income</div>
+              <div style={{ fontSize: 22 }}>{income}</div>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontWeight: 700, color: "#ef5350", fontSize: 20 }}>Expenses</div>
+              <div style={{ fontSize: 22 }}>{expenses}</div>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontWeight: 700, color: "#66bb6a", fontSize: 20 }}>Remaining</div>
+              <div style={{ fontSize: 22 }}>{remaining}</div>
+            </div>
+          </div>
+        </section>
+        <footer style={{ marginTop: 32, color: '#5f4dee', fontWeight: 600, textAlign: 'center', width: '100%' }}>
+          &copy; {new Date().getFullYear()} kanak verma
+        </footer>
+      </div>
     </div>
   );
 };

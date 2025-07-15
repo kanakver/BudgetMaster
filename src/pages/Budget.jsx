@@ -132,9 +132,7 @@ const Budget = () => {
             ))}
           </tbody>
         </table>
-        <footer style={{ marginTop: 24, color: '#5f4dee', fontWeight: 600, textAlign: 'center', width: '100%' }}>
-          &copy; {new Date().getFullYear()} kanak verma
-        </footer>
+    
       </div>
       {/* Charts */}
       <div className="modern-card">
