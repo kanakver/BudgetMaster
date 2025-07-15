@@ -1,0 +1,56 @@
+:root {
+  --bg: #f0f3fa;
+  --card: #fff;
+  --accent: #5f4dee;
+  --primary: #395886;
+  --secondary: #8aaee0;
+  --text: #222;
+  --table-bg: #f8f9fd;
+  --table-header: #f0f1fa;
+}
+
+body[data-theme="dark"] {
+  --bg: #00010D;
+  --card: #010326;
+  --accent: #A305A6;
+  --primary: #2D0140;
+  --secondary: #660273;
+  --text: #fff;
+  --table-bg: #1a1a2e;
+  --table-header: #2D0140;
+}
+
+body {
+  background: var(--bg) !important;
+  color: var(--text);
+}
+
+.modern-card, .dashboard-card {
+  background: var(--card);
+  color: var(--text);
+}
+
+.modern-card h2, .dashboard-card h3 {
+  color: var(--accent);
+}
+
+.modern-form label, .modern-table-summary, .modern-table th, .dashboard-card th {
+  color: var(--accent);
+}
+
+.modern-form button, .modern-delete, .modern-form-button {
+  background: var(--accent);
+  color: #fff;
+}
+
+.modern-form button:hover, .modern-delete:hover, .modern-form-button:hover {
+  background: var(--primary);
+}
+
+.modern-table, .dashboard-card table {
+  background: var(--table-bg);
+}
+
+.modern-table th, .dashboard-card th {
+  background: var(--table-header);
+} 
